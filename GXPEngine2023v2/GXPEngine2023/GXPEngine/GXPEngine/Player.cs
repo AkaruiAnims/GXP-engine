@@ -35,7 +35,6 @@ class Player : AnimationSprite {
         {
             MoveUntilCollision(noChange, fallingVelocity);
         }
-        Console.WriteLine(x + " " + y);
     }
     
     void Update()
