@@ -5,7 +5,7 @@ using System.Drawing;
 public class Lab_1_Test : Game {
 	public Lab_1_Test() : base(800, 600, false)    
 	{
-	Sprite sprite = new Sprite("colors.png");
+	Sprite sprite = new Sprite("Assets\\circle.png");
 	Player player = new Player();
 
 	AddChild(player);
