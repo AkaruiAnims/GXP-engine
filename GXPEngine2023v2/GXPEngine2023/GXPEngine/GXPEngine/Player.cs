@@ -1,5 +1,6 @@
 ﻿using System;
 using GXPEngine;
+using TiledMapParser;
 
 class Player : AnimationSprite {
 
@@ -16,6 +17,12 @@ class Player : AnimationSprite {
         scale = 5;
          
     }
+    
+    public Player(TiledObject obj=null) : base("CMGaTo_sheet.png",6,6) {
+        //Initialize(obj);
+         
+    }
+
 
     void playerMovement()
     {
