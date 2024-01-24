@@ -26,12 +26,16 @@ class Player : AnimationSprite {
     int[] get_hit_animation = { 30, 1 };
     int[] game_over_animation = { 32, 1 };
 
+    // if using image in tiled, tiled asks for image in contructor, otherwise it will use the default constructor
+    // 
+
     public Player() : base("CMGaTo_sheet.png",6,6) {
         scale = 5;
     }
     
     public Player(TiledObject obj=null) : base("CMGaTo_sheet.png",6,6) {
         //Initialize(obj);
+        Console.WriteLine(obj.GetStringProperty("name"));
          
     }
 
