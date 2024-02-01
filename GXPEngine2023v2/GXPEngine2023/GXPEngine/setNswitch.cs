@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class setNswitch : Game {
 
     Level level = new Level();
+    Sound sound;
 
 	public void LoadLevel ()
 	{
@@ -40,6 +41,8 @@ public class setNswitch : Game {
 
 	public setNswitch() : base(1000, 600, false)   // tiled map should be 63 by 38 
 	{
+        sound = new Sound("assets/music/Cute Bossa Nova.ogg", false, false);
+        sound.Play();
         LoadLevel(); 
 	}
 

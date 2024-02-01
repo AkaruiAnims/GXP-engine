@@ -122,18 +122,19 @@ class Player : AnimationSprite {
             gravity = 0;
             lastTouchedGround = Time.now;
 
-
-            if ( collidedObject.other == parent.FindObjectOfType<LevelKey>() )
-            {
-                Console.WriteLine("Player: has key");
-                hasKey = true;
-                collidedObject.other.Destroy();
-            }
-            
             if ( collidedObject.other == parent.FindObjectOfType<Button>() && hasKey  )
             {
                 parent.FindObjectOfType<Button>().SetNextLevel();
             }
+
+            if ( collidedObject.other == parent.FindObjectOfType<LevelKey>() )
+            {
+                Console.WriteLine("Player: has key");
+                Sound sound = new Sound("assets/sounds/key_pickup.wav", false, false);
+                hasKey = true;
+                collidedObject.other.Destroy();
+            }
+            
         } else
         {
             if ( Time.now - lastTouchedGround > 1000 )
