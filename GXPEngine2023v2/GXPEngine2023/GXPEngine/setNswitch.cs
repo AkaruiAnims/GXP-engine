@@ -3,6 +3,7 @@ using GXPEngine;
 using System.Drawing;
 using TiledMapParser;
 using System.Runtime.Remoting.Activation;
+using System.Collections.Generic;
 
 // tiled mandatory - or something similar to edit matrix without code
 // constructor or changing values in tiled?
@@ -10,23 +11,20 @@ using System.Runtime.Remoting.Activation;
 // get children added from tiled
 // save code without needing to rebuild exe
 public class setNswitch : Game {
-	TiledLoader tiledLoader; 
 
-	public void SetLevel (bool test)
+    Level level = new Level();
+
+	public void LoadLevel ()
 	{
-		if (test == true)
-		{
-            tiledLoader = new TiledLoader("map1.tmx");
+        // destroy all children
+        List<GameObject> children = GetChildren();
+        foreach (GameObject child in children)
+        {
+            child.Destroy(); 
         }
-        else
-		{
-            tiledLoader = new TiledLoader("map2.tmx");
-        }	
-	}
 
-	public setNswitch() : base(600, 600, false)    
-	{
-		SetLevel(true);
+        // load level
+        TiledLoader tiledLoader = new TiledLoader( level.LevelName );
         tiledLoader.autoInstance = true;
         tiledLoader.rootObject = this;
         tiledLoader.addColliders = false;
@@ -37,10 +35,13 @@ public class setNswitch : Game {
         tiledLoader.LoadObjectGroups( 0 );
         tiledLoader.addColliders = true;
         tiledLoader.LoadTileLayers( 1 );
+    }   
 
-		//Camera cam1 = new Camera(0, 0, width/2, height/2, true);
+
+	public setNswitch() : base(600, 600, false)    
+	{
+        LoadLevel(); 
 	}
-
 
 	void Update() 
 	{
