@@ -5,11 +5,6 @@ using TiledMapParser;
 using System.Runtime.Remoting.Activation;
 using System.Collections.Generic;
 
-// tiled mandatory - or something similar to edit matrix without code
-// constructor or changing values in tiled?
-// code reviews foor better grade 1 teacher & 2 peers 
-// get children added from tiled
-// save code without needing to rebuild exe
 public class setNswitch : Game {
 
     Level level = new Level();
@@ -19,8 +14,8 @@ public class setNswitch : Game {
         // destroy all children
         List<GameObject> children = GetChildren();
         foreach (GameObject child in children)
-        {
-            child.Destroy(); 
+        {   
+            if ( child != level) child.Destroy();
         }
 
         // load level
@@ -28,24 +23,34 @@ public class setNswitch : Game {
         tiledLoader.autoInstance = true;
         tiledLoader.rootObject = this;
         tiledLoader.addColliders = false;
-        tiledLoader.LoadImageLayers(0);
+        tiledLoader.LoadImageLayers(0);     // background
         tiledLoader.addColliders = true;
-        tiledLoader.LoadTileLayers( 0 );
+        tiledLoader.LoadTileLayers( 0 );    // maptiles
+        tiledLoader.addColliders = false;
+        tiledLoader.LoadTileLayers( 1 );    // decorations
+        tiledLoader.addColliders = true;    
+        tiledLoader.LoadObjectGroups( 0 );  // objects
         tiledLoader.addColliders = true;
-        tiledLoader.LoadObjectGroups( 0 );
-        tiledLoader.addColliders = true;
-        tiledLoader.LoadTileLayers( 1 );
+        tiledLoader.LoadTileLayers( 2 );    // UI
+        tiledLoader.addColliders = false;
+        tiledLoader.LoadObjectGroups( 1 );
+        AddChild(level);
     }   
 
 
-	public setNswitch() : base(600, 600, false)    
+	public setNswitch() : base(1000, 600, false)   // tiled map should be 63 by 38 
 	{
         LoadLevel(); 
 	}
 
 	void Update() 
 	{
-		
+        if ( level.next_level != null )
+        {
+            level.LevelName = level.next_level;
+            LoadLevel();
+            level.next_level = null;
+        }
 	}
 
 	static void Main()                          

@@ -42,6 +42,7 @@
     <Compile Include="GXPEngine\Player.cs" />
     <Compile Include="GXPEngine\Level.cs" />
     <Compile Include="GXPEngine\Button.cs" />
+    <Compile Include="GXPEngine\LevelKey.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="setNswitch.cs" />
     <Compile Include="GXPEngine\Core\Canvas.cs" />

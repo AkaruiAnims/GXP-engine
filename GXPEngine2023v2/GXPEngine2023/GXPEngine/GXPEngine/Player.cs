@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using GXPEngine;
+using GXPEngine.Core;
 using TiledMapParser;
 
 class Player : AnimationSprite {
 
-    float jumpVelocity = -3;
+    float jumpVelocity = -7;
+    int lastTouchedGround;
     float velocity = 3;
-    float fallingVelocity = 3;
     float gravity = 5;
-    float backwardsVelocity = -3;
     float noChange = 0;
     bool isGrounded = false;
+    bool hasKey = false;
+    bool hasLastTouchedGround = false;
+    Collision collidedObject;
 
     // animation variables
     int[] idle_animation = { 0, 5 };
@@ -39,24 +43,20 @@ class Player : AnimationSprite {
          
     }
 
-
+// also flip sprite when moving backwards and add gravity
     void playerMovement()
     {
         if (Input.GetKey(Key.A))
         {
-            MoveUntilCollision(backwardsVelocity, noChange);
+            collidedObject = MoveUntilCollision(-velocity, noChange);
         }
         if (Input.GetKey(Key.D))
         {
-            MoveUntilCollision(velocity, noChange);
+            collidedObject = MoveUntilCollision(velocity, noChange);
         }
-        if (Input.GetKey(Key.W))
+        if (Input.GetKey(Key.SPACE) && isGrounded)
         {
-            MoveUntilCollision(noChange, jumpVelocity);
-        }
-        if (Input.GetKey(Key.S))
-        {
-            MoveUntilCollision(noChange, fallingVelocity);
+            collidedObject = MoveUntilCollision(noChange, jumpVelocity);
         }
     }
 
@@ -92,11 +92,11 @@ class Player : AnimationSprite {
         {
             SetCycle( walk_animation[0], walk_animation[1] );
         }
-        if (Input.GetKey(Key.W))
+        if (Input.GetKey(Key.SPACE) && isGrounded)
         {
             SetCycle( jump_animation[0], jump_animation[1] );
         }
-        if (Input.GetKey(Key.S))
+        if ( isGrounded == false )
         {
             SetCycle( fall_animation[0], fall_animation[1] );
         }
@@ -114,5 +114,34 @@ class Player : AnimationSprite {
         playerMovement();
         updateAnimation();
         AnimateFixed(); 
+
+        // if colided with levelkey, set hasKey to true and destroy levelkey
+        if ( collidedObject != null)
+        {  
+            isGrounded = true;
+            gravity = 0;
+            lastTouchedGround = Time.now;
+
+
+            if ( collidedObject.other == parent.FindObjectOfType<LevelKey>() )
+            {
+                Console.WriteLine("Player: has key");
+                hasKey = true;
+                collidedObject.other.Destroy();
+            }
+            
+            if ( collidedObject.other == parent.FindObjectOfType<Button>() && hasKey  )
+            {
+                parent.FindObjectOfType<Button>().SetNextLevel();
+            }
+        } else
+        {
+            if ( Time.now - lastTouchedGround > 1000 )
+            {
+                isGrounded = false;
+            }
+            gravity += 0.1f;
+            collidedObject = MoveUntilCollision( noChange, gravity );
+        }
     }
 }
