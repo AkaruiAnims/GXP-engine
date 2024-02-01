@@ -37,7 +37,7 @@ class Player : AnimationSprite {
         scale = 5;
     }
     
-    public Player(TiledObject obj=null) : base("CMGaTo_sheet.png",6,6) {
+    public Player(TiledObject obj=null) : base("assets/CMGaTo_all.png",6,6) {
         //Initialize(obj);
         Console.WriteLine(obj.GetStringProperty("name"));
          
@@ -130,7 +130,8 @@ class Player : AnimationSprite {
             if ( collidedObject.other == parent.FindObjectOfType<LevelKey>() )
             {
                 Console.WriteLine("Player: has key");
-                Sound sound = new Sound("assets/sounds/key_pickup.wav", false, false);
+                Sound sound = new Sound("assets/sounds/pick_up.ogg", false, false);
+                sound.Play();
                 hasKey = true;
                 collidedObject.other.Destroy();
             }
